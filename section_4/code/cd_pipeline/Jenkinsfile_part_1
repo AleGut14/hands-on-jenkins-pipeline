@@ -8,43 +8,44 @@ pipeline {
     }
 
     stages {
-
         stage("Build") {
             steps { buildApp() }
-		}
+        }
 
         stage("Deploy - Dev") {
             steps { deploy('dev') }
-		}
-
-	}
+        }
+    }
 }
 
-
-// steps
+// Funzione di build (rimane quasi identica)
 def buildApp() {
-	dir ('section_4/code/cd_pipeline' ) {
-		def appImage = docker.build("hands-on-jenkins/myapp:${BUILD_NUMBER}")
-	}
+    dir('section_4/code/cd_pipeline') {
+        // Aggiunto bat per Windows e semplificata la sintassi
+        bat "docker build -t hands-on-jenkins/myapp:${BUILD_NUMBER} ."
+    }
 }
 
+// Funzione di deploy modificata per Windows
 def deploy(environment) {
+    def containerName = ''
+    def port = ''
 
-	def containerName = ''
-	def port = ''
+    if ("${environment}" == 'dev') {
+        containerName = "app_dev"
+        port = "8888"
+    } else {
+        error "Environment not valid"  // Modificato da System.exit a error per gestione più pulita
+    }
 
-	if ("${environment}" == 'dev') {
-		containerName = "app_dev"
-		port = "8888"
-	} 
-	else {
-		println "Environment not valid"
-		System.exit(0)
-	}
-
-	bat "docker ps -f name=${containerName} -q | xargs --no-run-if-empty docker stop"
-	bat "docker ps -a -f name=${containerName} -q | xargs -r docker rm"
-	bat "docker run -d -p ${port}:5000 --name ${containerName} hands-on-jenkins/myapp:${BUILD_NUMBER}"
-
+    // Sostituito i comandi Unix con versione Windows-compatibile
+    bat """
+        @echo off
+        for /f "tokens=*" %%i in ('docker ps -f name=${containerName} -q') do docker stop %%i
+        for /f "tokens=*" %%i in ('docker ps -a -f name=${containerName} -q') do docker rm %%i
+        docker run -d -p ${port}:5000 --name ${containerName} hands-on-jenkins/myapp:${BUILD_NUMBER}
+    """
+    
+    // Verifica aggiuntiva (opzionale)
+    bat "docker ps -f name=${containerName}"
 }
-
