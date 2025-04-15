@@ -5,7 +5,7 @@ app = Flask(__name__)
 
 # list of cat images
 images = [
-    "http://www.catshaming.co.uk/wp-content/uploads/2014/11/anigif_enhanced-buzz-26383-1381845104-25.gif",
+    "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExZDh2ajd5bDlyZ2RtejZ0NndwcjQwb2dyeGl4bXN0M2NldjQzbjY3MyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/CjmvTCZf2U3p09Cn0h/giphy.gif",
     "http://www.catshaming.co.uk/wp-content/uploads/2014/11/anigif_enhanced-buzz-26358-1381845043-13.gif",
     "http://www.catshaming.co.uk/wp-content/uploads/2014/11/anigif_enhanced-buzz-25329-1381845415-0.gif",
     "http://www.catshaming.co.uk/wp-content/uploads/2014/11/anigif_enhanced-buzz-23859-1381845509-0.gif",
